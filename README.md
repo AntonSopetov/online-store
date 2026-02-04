@@ -1,0 +1,1 @@
+Exceptions: валидация конструкторов + BestResultNotFound
