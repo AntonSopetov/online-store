@@ -33,4 +33,35 @@ public class SearchEngine {
         }
         return results;
     }
+
+    public Searchable findBestResult(String search) throws BestResultNotFound {
+        Searchable bestResult = null;
+        int maxCount = -1;
+
+        for (Searchable item : searchables) {
+            if (item != null) {
+                int count = 0;
+                int index = 0;
+
+                while (index != -1) {
+                    index = item.getSearchTerm().indexOf(search, index);
+                    if (index != -1) {
+                        count++;
+                        index += search.length();
+                    }
+                }
+
+                if (count > maxCount) {
+                    maxCount = count;
+                    bestResult = item;
+                }
+            }
+        }
+
+        if (bestResult == null) {
+            throw new BestResultNotFound(search);
+        }
+
+        return bestResult;
+    }
 }

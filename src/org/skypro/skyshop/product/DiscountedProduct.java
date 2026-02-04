@@ -6,6 +6,12 @@ public class DiscountedProduct extends Product {
 
     public DiscountedProduct(String name, int basePrice, int discountInWholePercentages) {
         super(name);
+        if (basePrice <= 0) {
+            throw new IllegalArgumentException("Базовая цена должна быть строго больше 0");
+        }
+        if (discountInWholePercentages < 0 || discountInWholePercentages > 100) {
+            throw new IllegalArgumentException("Скидка может быть от 0 до 100");
+        }
         this.basePrice = basePrice;
         this.discountInWholePercentages = discountInWholePercentages;
     }

@@ -11,6 +11,28 @@ import org.skypro.skyshop.Searchable;
 
 public class App {
     public static void main(String[] args) {
+        try {
+            Product nullName = new SimpleProduct("", 100);
+            System.out.println("Пустое имя");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+
+        // Тест 2: цена 0
+        try {
+            Product nullPrice = new SimpleProduct("Какой-то товар", 0);
+            System.out.println("Цена 0");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
+
+        // Тест 3: скидка 150%
+        try {
+            Product wrongDiscount = new DiscountedProduct("Товар", 100, 150);
+            System.out.println("Скидка 150%");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Ошибка: " + e.getMessage());
+        }
         Product phone = new SimpleProduct("Телефон", 50_000);
         Product computer = new DiscountedProduct("Компьютер", 150_000, 20); // 120000 руб.
         Product car = new FixPriceProduct("Машина"); // 1000 руб.
@@ -68,5 +90,19 @@ public class App {
         System.out.println("Поиск 'компьютер':");
         Searchable[] compResults = engine.search("компьютер");
         System.out.println(java.util.Arrays.toString(compResults));
+
+        System.out.println("\n--- ТЕСТ BEST RESULT ---");
+        try {
+            Searchable bestPhone = engine.findBestResult("телефон");
+            System.out.println("Лучший результат: " + bestPhone.getStringRepresentation());
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка поиска: " + e.getMessage());
+        }
+
+        try {
+            Searchable bestUnknown = engine.findBestResult("неизвестный_товар");
+        } catch (BestResultNotFound e) {
+            System.out.println("Ошибка поиска: " + e.getMessage());
+        }
     }
 }
