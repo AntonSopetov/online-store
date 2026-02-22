@@ -64,6 +64,14 @@ public class App {
         basket.clearBasket();
         System.out.println("Корзина очищена.");
 
+        System.out.println("--- Удаление продукта по имени ---");
+        if (basket.removeProductByName("Определённый товар")) {
+            System.out.println("Определённый товар удалён из корзины.");
+        } else {
+            System.out.println("Определённый товар не найден в корзине.");
+        }
+        basket.printBasket();
+
         System.out.println("--- Проверка пустой корзины ---");
         basket.printBasket();
         System.out.println("Стоимость пустой корзины: " + basket.getTotalCost());
