@@ -8,6 +8,7 @@ import org.skypro.skyshop.basket.ProductBasket;
 import java.util.Objects;
 import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.Searchable;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -34,9 +35,9 @@ public class App {
             System.out.println("Ошибка: " + e.getMessage());
         }
         Product phone = new SimpleProduct("Телефон", 50_000);
-        Product computer = new DiscountedProduct("Компьютер", 150_000, 20); // 120000 руб.
+        Product computer = new DiscountedProduct("Компьютер", 150_000, 20);
         Product car = new FixPriceProduct("Машина"); // 1000 руб.
-        Product extra = new SimpleProduct("Лишний товар", 999_999); // Добавлен для проверки лимита корзины
+        Product extra = new SimpleProduct("Лишний товар", 999_999);
 
         ProductBasket basket = new ProductBasket();
 
@@ -55,29 +56,34 @@ public class App {
         System.out.println("Итоговая сумма: " + basket.getTotalCost());
 
         System.out.println("--- Поиск существующего товара (Телефон) ---");
-        System.out.println("Найден? " + basket.checkProductByName("Телефон")); // Ожидаем true
+        System.out.println("Найден? " + basket.checkProductByName("Телефон"));
 
         System.out.println("--- Поиск несуществующего товара (Утюг) ---");
-        System.out.println("Найден? " + basket.checkProductByName("Утюг")); // Ожидаем false
+        System.out.println("Найден? " + basket.checkProductByName("Утюг"));
 
         System.out.println("--- Очистка корзины ---");
         basket.clearBasket();
         System.out.println("Корзина очищена.");
 
         System.out.println("--- Удаление продукта по имени ---");
-        if (basket.removeProductByName("Определённый товар")) {
-            System.out.println("Определённый товар удалён из корзины.");
+        List<Product> removedProducts = basket.removeProductByName("Определённый товар");
+        if (!removedProducts.isEmpty()) {
+            System.out.println("Удалено продуктов: " + removedProducts.size());
+            for (Product p : removedProducts) {
+                System.out.println("Удалён: " + p.getProductName());
+            }
         } else {
-            System.out.println("Определённый товар не найден в корзине.");
+            System.out.println("Продукт не найден в корзине.");
         }
         basket.printBasket();
+
 
         System.out.println("--- Проверка пустой корзины ---");
         basket.printBasket();
         System.out.println("Стоимость пустой корзины: " + basket.getTotalCost());
 
         System.out.println("--- Поиск в пустой корзине ---");
-        System.out.println("Найден? " + basket.checkProductByName("Телефон")); // Ожидаем false
+        System.out.println("Найден? " + basket.checkProductByName("Телефон"));
 
         System.out.println("--- ТЕСТ ПОИСКА ---");
         SearchEngine engine = new SearchEngine(10);

@@ -2,6 +2,8 @@ package org.skypro.skyshop;
 
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.article.Article;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchEngine {
     private final Searchable[] searchables;
@@ -63,5 +65,28 @@ public class SearchEngine {
         }
 
         return bestResult;
+    }
+
+    public List<Product> findByNamePart(String part) {
+        List<Product> results = new ArrayList<>();
+        for (Searchable item : searchables) {
+            if (item instanceof Product &&
+                    item.getName().toLowerCase().contains(part.toLowerCase())) {
+                results.add((Product) item);
+            }
+        }
+        return results;
+    }
+
+    public List<Product> findByPriceRange(double min, double max) {
+        List<Product> results = new ArrayList<>();
+        for (Searchable item : searchables) {
+            if (item instanceof Product p) {
+                if (p.getPrice() >= min && p.getPrice() <= max) {
+                    results.add(p);
+                }
+            }
+        }
+        return results;
     }
 }
