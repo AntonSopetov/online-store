@@ -3,29 +3,24 @@ package org.skypro.skyshop;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.article.Article;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SearchEngine {
-    private final Searchable[] searchables;
+    private List<Searchable> searchableProducts = new LinkedList<>();
 
     public SearchEngine(int capacity) {
-        this.searchables = new Searchable[capacity];
     }
 
     public void add(Searchable item) {
-        for (int i = 0; i < searchables.length; i++) {
-            if (searchables[i] == null) {
-                searchables[i] = item;
-                return;
-            }
-        }
+        searchableProducts.add(item);
     }
 
     public Searchable[] search(String query) {
         Searchable[] results = new Searchable[5];
         int foundCount = 0;
 
-        for (Searchable item : searchables) {
+        for (Searchable item : searchableProducts) {
             if (item != null &&
                     item.getSearchTerm().contains(query) &&
                     foundCount < 5) {
@@ -40,7 +35,7 @@ public class SearchEngine {
         Searchable bestResult = null;
         int maxCount = -1;
 
-        for (Searchable item : searchables) {
+        for (Searchable item : searchableProducts) {
             if (item != null) {
                 int count = 0;
                 int index = 0;
@@ -69,7 +64,7 @@ public class SearchEngine {
 
     public List<Product> findByNamePart(String part) {
         List<Product> results = new ArrayList<>();
-        for (Searchable item : searchables) {
+        for (Searchable item : searchableProducts) {
             if (item instanceof Product &&
                     item.getName().toLowerCase().contains(part.toLowerCase())) {
                 results.add((Product) item);
@@ -80,7 +75,7 @@ public class SearchEngine {
 
     public List<Product> findByPriceRange(double min, double max) {
         List<Product> results = new ArrayList<>();
-        for (Searchable item : searchables) {
+        for (Searchable item : searchableProducts) {
             if (item instanceof Product p) {
                 if (p.getPrice() >= min && p.getPrice() <= max) {
                     results.add(p);

@@ -77,7 +77,6 @@ public class App {
         }
         basket.printBasket();
 
-
         System.out.println("--- Проверка пустой корзины ---");
         basket.printBasket();
         System.out.println("Стоимость пустой корзины: " + basket.getTotalCost());
