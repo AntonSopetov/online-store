@@ -1,24 +1,26 @@
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+
+import java.util.*;
 
 
 public class ProductBasket {
-    List<Product> products = new LinkedList<>();
+    Map<String, List<Product>> products = new HashMap<>();
 
     public void addProduct(Product product) {
-        products.add(product);
+        String name = product.getName();
+        products
+                .computeIfAbsent(name, k -> new ArrayList<>())
+                .add(product);
     }
 
     public double getTotalCost() {
-        int totalCost = 0;
-        for (Product p : products) {
-            totalCost += p.getPrice();
+        double totalCost = 0.0;
+        for (List<Product> list : products.values()) {
+            for (Product p : list) {
+                totalCost += p.getPrice();
+            }
         }
         return totalCost;
     }
@@ -31,10 +33,12 @@ public class ProductBasket {
 
         int specialCount = 0;
 
-        for (Product p : products) {
-            System.out.println(p.toString());
-            if (p.isSpecial()) {
-                specialCount++;
+        for (List<Product> list : products.values()) {
+            for (Product p : list) {
+                System.out.println(p.toString());
+                if (p.isSpecial()) {
+                    specialCount++;
+                }
             }
         }
         System.out.println("Итого: " + getTotalCost());
@@ -42,9 +46,11 @@ public class ProductBasket {
     }
 
     public boolean checkProductByName(String searchName) {
-        for (Product p : products) {
-            if (p.getProductName().equals(searchName))
-                return true;
+        for (List<Product> list : products.values()) {
+            for (Product p : list) {
+                if (p.getProductName().equals(searchName))
+                    return true;
+            }
         }
         return false;
     }
@@ -56,15 +62,15 @@ public class ProductBasket {
     public List<Product> removeProductByName(String name) {
         List<Product> removed = new ArrayList<>();
 
-        Iterator<Product> iterator = products.iterator();
-        while (iterator.hasNext()) {
-            Product p = iterator.next();
-            if (p.getProductName().equals(name)) {
-                removed.add(p);
-                iterator.remove();
-            }
+        List<Product> list = products.get(name);
+        if (list != null) {
+            removed.addAll(list);
+            products.remove(name);
         }
-
         return removed;
+    }
+
+    public List<Product> getProductsByName(String name) {
+        return products.getOrDefault(name, new ArrayList<>());
     }
 }

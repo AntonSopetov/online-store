@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.Searchable;
 import java.util.List;
+import java.util.TreeMap;
 
 public class App {
     public static void main(String[] args) {
@@ -19,7 +20,6 @@ public class App {
             System.out.println("Ошибка: " + e.getMessage());
         }
 
-        // Тест 2: цена 0
         try {
             Product nullPrice = new SimpleProduct("Какой-то товар", 0);
             System.out.println("Цена 0");
@@ -27,7 +27,6 @@ public class App {
             System.out.println("Ошибка: " + e.getMessage());
         }
 
-        // Тест 3: скидка 150%
         try {
             Product wrongDiscount = new DiscountedProduct("Товар", 100, 150);
             System.out.println("Скидка 150%");
@@ -96,13 +95,17 @@ public class App {
         engine.add(article1);
         engine.add(article2);
 
-        System.out.println("Поиск 'телефон':");
-        Searchable[] phoneResults = engine.search("телефон");
-        System.out.println(java.util.Arrays.toString(phoneResults));
+        System.out.println("Поиск телефона: ");
+        TreeMap<String, Searchable> phoneResultsMap = engine.searchByNameSorted("телефон");
+        for (Searchable item : phoneResultsMap.values()) {
+            System.out.println(item);
+        }
 
-        System.out.println("Поиск 'компьютер':");
-        Searchable[] compResults = engine.search("компьютер");
-        System.out.println(java.util.Arrays.toString(compResults));
+        System.out.println("Поиск компьютера: ");
+        TreeMap<String, Searchable> compResultsMap = engine.searchByNameSorted("компьютер");
+        for (Searchable item : compResultsMap.values()) {
+            System.out.println(item);
+        }
 
         System.out.println("\n--- ТЕСТ BEST RESULT ---");
         try {

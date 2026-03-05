@@ -5,6 +5,7 @@ import org.skypro.skyshop.article.Article;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeMap;
 
 public class SearchEngine {
     private List<Searchable> searchableProducts = new LinkedList<>();
@@ -83,5 +84,19 @@ public class SearchEngine {
             }
         }
         return results;
+    }
+
+    public TreeMap<String, Searchable> searchByNameSorted(String query) {
+        TreeMap<String, Searchable> result = new TreeMap<>();
+
+        for (Searchable item : searchableProducts) {
+            if (item == null) continue;
+
+            if (item.getSearchTerm().contains(query)) {
+                String key = item.getName();  // уникальное имя
+                result.put(key, item);
+            }
+        }
+        return result;
     }
 }
