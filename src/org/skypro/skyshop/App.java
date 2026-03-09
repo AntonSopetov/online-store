@@ -10,6 +10,7 @@ import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.Searchable;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class App {
     public static void main(String[] args) {
@@ -96,14 +97,14 @@ public class App {
         engine.add(article2);
 
         System.out.println("Поиск телефона: ");
-        TreeMap<String, Searchable> phoneResultsMap = engine.searchByNameSorted("телефон");
-        for (Searchable item : phoneResultsMap.values()) {
+        TreeSet<Searchable> phoneResultsSet = engine.searchByNameSorted("телефон");
+        for (Searchable item : phoneResultsSet) {
             System.out.println(item);
         }
 
         System.out.println("Поиск компьютера: ");
-        TreeMap<String, Searchable> compResultsMap = engine.searchByNameSorted("компьютер");
-        for (Searchable item : compResultsMap.values()) {
+        TreeSet<Searchable> compResultsSet = engine.searchByNameSorted("компьютер");
+        for (Searchable item : compResultsSet) {
             System.out.println(item);
         }
 

@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.*;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 public class SearchEngine {
-    private List<Searchable> searchableProducts = new LinkedList<>();
+    private Set<Searchable> searchableProducts = new HashSet<>();
 
     public SearchEngine(int capacity) {
     }
@@ -86,15 +89,28 @@ public class SearchEngine {
         return results;
     }
 
-    public TreeMap<String, Searchable> searchByNameSorted(String query) {
-        TreeMap<String, Searchable> result = new TreeMap<>();
+    private final Comparator<Searchable> longToShortComparator = new Comparator<Searchable>() {
+        @Override
+        public int compare(Searchable item1, Searchable item2) {
+            int lengthCompare = Integer.compare(
+                    item2.getName().length(),
+                    item1.getName().length()
+            );
+
+            if (lengthCompare != 0) {
+                return lengthCompare;
+            }
+
+            return item1.getName().compareTo(item2.getName());
+        }
+    };
+
+    public TreeSet<Searchable> searchByNameSorted(String query) {
+        TreeSet<Searchable> result = new TreeSet<>(longToShortComparator);
 
         for (Searchable item : searchableProducts) {
-            if (item == null) continue;
-
-            if (item.getSearchTerm().contains(query)) {
-                String key = item.getName();  // уникальное имя
-                result.put(key, item);
+            if (item.getName().toLowerCase().contains(query.toLowerCase())) {
+                result.add(item);
             }
         }
         return result;
