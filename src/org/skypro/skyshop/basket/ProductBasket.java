@@ -1,7 +1,7 @@
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
-
+import java.util.stream.Collectors;
 import java.util.*;
 
 
@@ -16,13 +16,10 @@ public class ProductBasket {
     }
 
     public double getTotalCost() {
-        double totalCost = 0.0;
-        for (List<Product> list : products.values()) {
-            for (Product p : list) {
-                totalCost += p.getPrice();
-            }
-        }
-        return totalCost;
+        return products.values().stream()
+                .flatMap(List::stream)
+                .mapToInt(Product::getPrice)
+                .sum();
     }
 
     public void printBasket() {
@@ -31,18 +28,12 @@ public class ProductBasket {
             return;
         }
 
-        int specialCount = 0;
+        products.values().stream()
+                .flatMap(List::stream)
+                .forEach(System.out::println);
 
-        for (List<Product> list : products.values()) {
-            for (Product p : list) {
-                System.out.println(p.toString());
-                if (p.isSpecial()) {
-                    specialCount++;
-                }
-            }
-        }
         System.out.println("Итого: " + getTotalCost());
-        System.out.println("Специальных товаров: " + specialCount);
+        System.out.println("Специальных товаров: " + getSpecialCount());
     }
 
     public boolean checkProductByName(String searchName) {
@@ -72,5 +63,12 @@ public class ProductBasket {
 
     public List<Product> getProductsByName(String name) {
         return products.getOrDefault(name, new ArrayList<>());
+    }
+
+    private long getSpecialCount() {
+        return products.values().stream()
+                .flatMap(List::stream)
+                .filter(Product::isSpecial)
+                .count();
     }
 }

@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import java.util.*;
 import java.util.Comparator;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
     private Set<Searchable> searchableProducts = new HashSet<>();
@@ -106,13 +107,9 @@ public class SearchEngine {
     };
 
     public TreeSet<Searchable> searchByNameSorted(String query) {
-        TreeSet<Searchable> result = new TreeSet<>(longToShortComparator);
-
-        for (Searchable item : searchableProducts) {
-            if (item.getName().toLowerCase().contains(query.toLowerCase())) {
-                result.add(item);
-            }
-        }
-        return result;
+        return searchableProducts.stream()
+                .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(longToShortComparator)));
     }
+
 }
